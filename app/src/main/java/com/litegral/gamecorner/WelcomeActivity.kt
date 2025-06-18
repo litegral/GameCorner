@@ -2,6 +2,7 @@ package com.litegral.gamecorner
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -28,12 +29,19 @@ class WelcomeActivity : AppCompatActivity() {
         
         // Password login button
         findViewById<MaterialButton>(R.id.password_login_button).setOnClickListener {
-            // TODO: Navigate to login screen
+            // Navigate to sign-in screen
+            startActivity(Intent(this, SignInActivity::class.java))
         }
         
         // Register text container
         findViewById<LinearLayout>(R.id.register_container).setOnClickListener {
-            // TODO: Navigate to register screen
+            // Navigate to sign up screen
+            startActivity(Intent(this, SignUpActivity::class.java))
         }
+    }
+    
+    // Method for XML onClick attribute
+    fun navigateToSignUp(view: View) {
+        startActivity(Intent(this, SignUpActivity::class.java))
     }
 } 

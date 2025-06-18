@@ -212,7 +212,8 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground">
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="navigateToSignUp">
 
             <TextView
                 android:id="@+id/register_prefix_text"

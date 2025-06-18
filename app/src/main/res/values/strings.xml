@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Game Corner</string>
     
@@ -9,6 +10,28 @@
     <string name="login_with_password">Log in with password</string>
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="register">Register</string>
+    
+    <!-- Sign In Screen -->
+    <string name="login_to_your_account">Login to Your Account</string>
+    <string name="email">Email</string>
+    <string name="nim">NIM</string>
+    <string name="password">Password</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_in">Sign in</string>
+    <string name="or_continue_with">or continue with</string>
+    
+    <!-- Sign Up Screen -->
+    <string name="create_your_account">Create Your Account</string>
+    <string name="full_name">Full Name</string>
+    <string name="program_study">Program Study</string>
+    <string name="batch">Batch</string>
+    <string name="phone">Phone</string>
+    <string name="gender">Gender</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="terms_and_conditions">By creating an account, you agree to our Terms &amp; Conditions</string>
     
     <!-- Common -->
     <string name="hello_world">Hello World!</string>

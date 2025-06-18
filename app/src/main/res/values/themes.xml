@@ -6,4 +6,23 @@
     </style>
 
     <style name="Theme.GameCorner" parent="Base.Theme.GameCorner" />
+    
+    <!-- Custom Spinner Theme -->
+    <style name="SpinnerTheme" parent="Widget.AppCompat.Spinner">
+        <item name="android:textColor">@color/text_primary_light</item>
+        <item name="android:textColorHint">#95989D</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:popupBackground">@color/button_api_background</item>
+        <item name="android:dropDownSelector">?android:attr/selectableItemBackground</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item>
+    </style>
+    
+    <!-- Custom Spinner Dropdown Item Style -->
+    <style name="SpinnerDropDownItem" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textColor">@color/text_primary_light</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
 </resources>
