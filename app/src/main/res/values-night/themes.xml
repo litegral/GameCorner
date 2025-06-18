@@ -3,5 +3,17 @@
     <style name="Base.Theme.GameCorner" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        
+        <!-- Bottom Navigation Styling -->
+        <item name="colorPrimary">@color/bottom_nav_selected_start</item>
+        <item name="colorOnSurface">@color/bottom_nav_unselected</item>
+    </style>
+    
+    <!-- Bottom Navigation Active Indicator Style -->
+    <style name="BottomNavActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@android:color/transparent</item>
+        <item name="android:drawable">@drawable/bottom_nav_icon_background</item>
+        <item name="android:width">32dp</item>
+        <item name="android:height">32dp</item>
     </style>
 </resources>

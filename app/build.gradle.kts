@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
     implementation(libs.glide)
+    implementation(libs.circleimageview)
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

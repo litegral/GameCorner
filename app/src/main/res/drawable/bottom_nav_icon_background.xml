@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <shape android:shape="oval">
+            <gradient
+                android:angle="45"
+                android:startColor="@color/bottom_nav_selected_start"
+                android:endColor="@color/bottom_nav_selected_end"
+                android:type="linear" />
+            <size android:width="32dp" android:height="32dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@android:color/transparent" />
+            <size android:width="32dp" android:height="32dp" />
+        </shape>
+    </item>
+</selector> 

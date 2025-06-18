@@ -7,14 +7,31 @@
     <!-- Primary Colors -->
     <color name="primary_orange">#F8BE4F</color>
     <color name="primary_coral">#F98475</color>
+    <color name="primary_dark">#21242C</color>
     
     <!-- Text Colors -->
     <color name="text_primary_light">#F5F6F8</color>
     <color name="text_secondary_light">#CACBCE</color>
     <color name="text_primary_dark">#21242C</color>
+    <color name="text_primary">#F5F6F8</color>
+    <color name="text_secondary">#CACBCE</color>
+    <color name="text_muted">#8A8C90</color>
+    
+    <!-- Accent Colors -->
+    <color name="accent_yellow">#FFD700</color>
+    <color name="accent_orange">#F8BE4F</color>
+    
+    <!-- Background Colors -->
+    <color name="navbar_background">#1A1D25</color>
+    <color name="card_background_blur">#33FFFFFF</color>
     
     <!-- Button Colors -->
     <color name="button_api_background">#1AFFFFFF</color>
+    
+    <!-- Bottom Navigation Colors -->
+    <color name="bottom_nav_selected_start">#F8BE4F</color>
+    <color name="bottom_nav_selected_end">#FFFFFF</color>
+    <color name="bottom_nav_unselected">#8A8C90</color>
     
     <!-- Transparent Colors -->
     <color name="transparent">#00000000</color>
