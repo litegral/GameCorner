@@ -3,4 +3,19 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="splash_background">#21242C</color>
+    
+    <!-- Primary Colors -->
+    <color name="primary_orange">#F8BE4F</color>
+    <color name="primary_coral">#F98475</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary_light">#F5F6F8</color>
+    <color name="text_secondary_light">#CACBCE</color>
+    <color name="text_primary_dark">#21242C</color>
+    
+    <!-- Button Colors -->
+    <color name="button_api_background">#1AFFFFFF</color>
+    
+    <!-- Transparent Colors -->
+    <color name="transparent">#00000000</color>
 </resources>

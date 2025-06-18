@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Game Corner</string>
+    
+    <!-- Welcome Screen -->
+    <string name="welcome_back">Welcome Back</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="continue_with_apple">Continue with Apple</string>
+    <string name="or_divider">or</string>
+    <string name="login_with_password">Log in with password</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="register">Register</string>
+    
+    <!-- Common -->
+    <string name="hello_world">Hello World!</string>
 </resources>
