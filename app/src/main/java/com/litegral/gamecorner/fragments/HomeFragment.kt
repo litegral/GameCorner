@@ -24,6 +24,7 @@ import com.litegral.gamecorner.repositories.GameStationRepository
 import com.litegral.gamecorner.utils.AuthUtils
 import com.litegral.gamecorner.utils.FavoriteUtils
 import com.litegral.gamecorner.utils.FirestoreUtils
+import com.litegral.gamecorner.utils.ProfileUtils
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -128,7 +129,36 @@ class HomeFragment : Fragment() {
         welcomeText.text = welcomeMessage
         
         // Load user profile image if available
-        // TODO: Implement profile image loading with Glide or similar
+        loadUserProfileImage()
+        
+        // Add click listener to profile avatar
+        profileAvatar.setOnClickListener {
+            navigateToProfile()
+        }
+    }
+    
+    private fun loadUserProfileImage() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                ProfileUtils.loadProfileImageIntoView(
+                    requireContext(),
+                    profileAvatar,
+                    R.drawable.default_avatar
+                )
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading profile image", e)
+                // Fallback to default avatar
+                profileAvatar.setImageResource(R.drawable.default_avatar)
+            }
+        }
+    }
+    
+    private fun navigateToProfile() {
+        val profileFragment = ProfileFragment.newInstance()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, profileFragment)
+            .addToBackStack("Profile")
+            .commit()
     }
     
     private fun setupRecyclerView() {
@@ -419,5 +449,19 @@ class HomeFragment : Fragment() {
             .replace(R.id.fragment_container, psDetailFragment)
             .addToBackStack(null)
             .commit()
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        // Refresh profile image when returning to fragment
+        loadUserProfileImage()
+    }
+    
+    /**
+     * Public method to refresh the profile image
+     * Can be called from other fragments after profile updates
+     */
+    fun refreshProfileImage() {
+        loadUserProfileImage()
     }
 } 

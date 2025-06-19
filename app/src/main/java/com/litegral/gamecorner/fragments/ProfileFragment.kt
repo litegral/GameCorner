@@ -11,11 +11,13 @@ import androidx.fragment.app.Fragment
 import com.litegral.gamecorner.R
 import com.litegral.gamecorner.SignInActivity
 import com.litegral.gamecorner.utils.AuthUtils
+import com.litegral.gamecorner.utils.ProfileUtils
+import androidx.lifecycle.lifecycleScope
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
     
-    private lateinit var backButton: FrameLayout
     private lateinit var profileAvatar: CircleImageView
     private lateinit var cameraButton: FrameLayout
     private lateinit var profileMenuItem: LinearLayout
@@ -50,7 +52,6 @@ class ProfileFragment : Fragment() {
     }
     
     private fun initializeViews(view: View) {
-        backButton = view.findViewById(R.id.back_button)
         profileAvatar = view.findViewById(R.id.profile_avatar)
         cameraButton = view.findViewById(R.id.camera_button)
         profileMenuItem = view.findViewById(R.id.profile_menu_item)
@@ -62,11 +63,6 @@ class ProfileFragment : Fragment() {
     }
     
     private fun setupClickListeners() {
-        backButton.setOnClickListener {
-            // Navigate back to previous fragment or close if this is the main profile screen
-            parentFragmentManager.popBackStack()
-        }
-        
         cameraButton.setOnClickListener {
             // TODO: Implement camera/gallery picker for profile photo
             handleProfilePhotoChange()
@@ -103,18 +99,19 @@ class ProfileFragment : Fragment() {
     }
     
     private fun loadUserProfile() {
-        // TODO: Load user profile data from repository/preferences
-        // For now, this is a placeholder
-        
-        // Example of loading user avatar if we have the URL stored
-        // val avatarUrl = PreferenceUtils.getUserAvatarUrl()
-        // if (avatarUrl.isNotEmpty()) {
-        //     Glide.with(this)
-        //         .load(avatarUrl)
-        //         .placeholder(R.drawable.default_avatar)
-        //         .error(R.drawable.default_avatar)
-        //         .into(profileAvatar)
-        // }
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                ProfileUtils.loadProfileImageIntoView(
+                    requireContext(),
+                    profileAvatar,
+                    R.drawable.default_avatar
+                )
+            } catch (e: Exception) {
+                android.util.Log.e(TAG, "Error loading profile image", e)
+                // Fallback to default avatar
+                profileAvatar.setImageResource(R.drawable.default_avatar)
+            }
+        }
     }
     
     private fun handleProfilePhotoChange() {
@@ -136,12 +133,12 @@ class ProfileFragment : Fragment() {
     }
     
     private fun handleProfileEdit() {
-        // TODO: Navigate to profile edit fragment
-        android.widget.Toast.makeText(
-            requireContext(),
-            "Profile edit coming soon!",
-            android.widget.Toast.LENGTH_SHORT
-        ).show()
+        // Navigate to profile edit fragment
+        val profileEditFragment = ProfileEditFragment.newInstance()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, profileEditFragment)
+            .addToBackStack("ProfileEdit")
+            .commit()
     }
     
     private fun handlePasswordChange() {
