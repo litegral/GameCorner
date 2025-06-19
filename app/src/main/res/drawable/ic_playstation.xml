@@ -27,26 +27,18 @@
       android:fillColor="@color/card_background_dark"
       android:pathData="M7,11h3v2H7V11z"/>
   
-  <!-- Action buttons -->
-  <circle
+  <!-- Action buttons as circles using path -->
+  <path
       android:fillColor="@color/card_background_dark"
-      cx="15"
-      cy="10"
-      r="0.8"/>
-  <circle
+      android:pathData="M15,9.2A0.8,0.8 0 0,0 14.2,10A0.8,0.8 0 0,0 15,10.8A0.8,0.8 0 0,0 15.8,10A0.8,0.8 0 0,0 15,9.2Z"/>
+  <path
       android:fillColor="@color/card_background_dark"
-      cx="16.5"
-      cy="11.5"
-      r="0.8"/>
-  <circle
+      android:pathData="M16.5,10.7A0.8,0.8 0 0,0 15.7,11.5A0.8,0.8 0 0,0 16.5,12.3A0.8,0.8 0 0,0 17.3,11.5A0.8,0.8 0 0,0 16.5,10.7Z"/>
+  <path
       android:fillColor="@color/card_background_dark"
-      cx="15"
-      cy="13"
-      r="0.8"/>
-  <circle
+      android:pathData="M15,12.2A0.8,0.8 0 0,0 14.2,13A0.8,0.8 0 0,0 15,13.8A0.8,0.8 0 0,0 15.8,13A0.8,0.8 0 0,0 15,12.2Z"/>
+  <path
       android:fillColor="@color/card_background_dark"
-      cx="13.5"
-      cy="11.5"
-      r="0.8"/>
+      android:pathData="M13.5,10.7A0.8,0.8 0 0,0 12.7,11.5A0.8,0.8 0 0,0 13.5,12.3A0.8,0.8 0 0,0 14.3,11.5A0.8,0.8 0 0,0 13.5,10.7Z"/>
   
 </vector> 

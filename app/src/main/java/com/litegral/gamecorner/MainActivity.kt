@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.litegral.gamecorner.fragments.FavoritesFragment
 import com.litegral.gamecorner.fragments.HomeFragment
+import com.litegral.gamecorner.fragments.ProfileFragment
 import com.litegral.gamecorner.utils.AuthUtils
 import com.litegral.gamecorner.utils.PreferenceUtils
 
@@ -59,8 +60,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_profile -> {
-                    // TODO: Create and load ProfileFragment
-                    loadFragment(createPlaceholderFragment("Profile"))
+                    loadFragment(ProfileFragment.newInstance())
                     true
                 }
                 else -> false
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
     
-    // Temporary placeholder fragment for unimplemented screens
+    // Temporary placeholder fragment for screens that haven't been implemented yet
     private fun createPlaceholderFragment(title: String): Fragment {
         return PlaceholderFragment.newInstance(title)
     }
