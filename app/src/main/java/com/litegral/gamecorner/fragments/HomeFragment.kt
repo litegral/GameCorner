@@ -1,5 +1,6 @@
 package com.litegral.gamecorner.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,12 +18,18 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.litegral.gamecorner.R
 import com.litegral.gamecorner.adapters.GameStationAdapter
+import com.litegral.gamecorner.models.FirebaseBooking
 import com.litegral.gamecorner.models.GameStation
 import com.litegral.gamecorner.repositories.GameStationRepository
 import com.litegral.gamecorner.utils.AuthUtils
 import com.litegral.gamecorner.utils.FavoriteUtils
+import com.litegral.gamecorner.utils.FirestoreUtils
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.*
 
 class HomeFragment : Fragment() {
     
@@ -31,6 +39,17 @@ class HomeFragment : Fragment() {
     private lateinit var loadingIndicator: ProgressBar
     private lateinit var gameStationAdapter: GameStationAdapter
     private lateinit var gameStationRepository: GameStationRepository
+    
+    // Active Reservation Components
+    private lateinit var activeReservationComponent: View
+    private lateinit var stationNameText: TextView
+    private lateinit var stationSubNameText: TextView
+    private lateinit var reservationDateText: TextView
+    private lateinit var reservationTimeText: TextView
+    private lateinit var cancelButton: CardView
+    private lateinit var viewDetailsButton: CardView
+    
+    private var activeBooking: FirebaseBooking? = null
     
     companion object {
         private const val TAG = "HomeFragment"
@@ -67,6 +86,8 @@ class HomeFragment : Fragment() {
         initializeViews(view)
         setupUI()
         setupRecyclerView()
+        setupActiveReservationListeners()
+        loadActiveBooking()
         loadGameStations()
     }
     
@@ -75,6 +96,15 @@ class HomeFragment : Fragment() {
         profileAvatar = view.findViewById(R.id.profile_avatar)
         gameStationsRecycler = view.findViewById(R.id.game_stations_recycler)
         loadingIndicator = view.findViewById(R.id.loading_indicator)
+        
+        // Active Reservation Components
+        activeReservationComponent = view.findViewById(R.id.active_reservation_component)
+        stationNameText = view.findViewById(R.id.station_name_text)
+        stationSubNameText = view.findViewById(R.id.station_sub_name_text)
+        reservationDateText = view.findViewById(R.id.reservation_date_text)
+        reservationTimeText = view.findViewById(R.id.reservation_time_text)
+        cancelButton = view.findViewById(R.id.cancel_button)
+        viewDetailsButton = view.findViewById(R.id.view_details_button)
     }
     
     private fun setupUI() {
@@ -113,6 +143,143 @@ class HomeFragment : Fragment() {
         }
         
         gameStationsRecycler.adapter = gameStationAdapter
+    }
+    
+    private fun setupActiveReservationListeners() {
+        cancelButton.setOnClickListener {
+            activeBooking?.let { booking ->
+                showCancelConfirmationDialog(booking)
+            }
+        }
+        
+        viewDetailsButton.setOnClickListener {
+            activeBooking?.let { booking ->
+                // Navigate to booking details or show details dialog
+                showBookingDetailsDialog(booking)
+            }
+        }
+    }
+    
+    private fun loadActiveBooking() {
+        val currentUser = AuthUtils.getCurrentUser()
+        if (currentUser == null) {
+            hideActiveReservation()
+            return
+        }
+        
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val result = FirestoreUtils.getTodaysActiveBooking(currentUser.uid)
+                
+                if (result.isSuccess) {
+                    val booking = result.getOrNull()
+                    activeBooking = booking
+                    
+                    if (booking != null) {
+                        showActiveReservation(booking)
+                    } else {
+                        hideActiveReservation()
+                    }
+                } else {
+                    Log.e(TAG, "Failed to load active booking", result.exceptionOrNull())
+                    hideActiveReservation()
+                }
+                
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading active booking", e)
+                hideActiveReservation()
+            }
+        }
+    }
+    
+    private fun showActiveReservation(booking: FirebaseBooking) {
+        if (!isAdded || view == null) return
+        
+        stationNameText.text = booking.gameStationName
+        stationSubNameText.text = booking.gameStationSubName
+        
+        // Format date
+        val bookingDate = LocalDate.parse(booking.date)
+        val today = LocalDate.now()
+        
+        val dateText = when {
+            bookingDate.isEqual(today) -> "Today"
+            bookingDate.isEqual(today.plusDays(1)) -> "Tomorrow"
+            else -> {
+                val dayOfWeek = bookingDate.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
+                val formatter = DateTimeFormatter.ofPattern("dd MMM")
+                "$dayOfWeek, ${bookingDate.format(formatter)}"
+            }
+        }
+        
+        reservationDateText.text = dateText
+        reservationTimeText.text = booking.time
+        
+        activeReservationComponent.visibility = View.VISIBLE
+    }
+    
+    private fun hideActiveReservation() {
+        if (!isAdded || view == null) return
+        activeReservationComponent.visibility = View.GONE
+    }
+    
+    private fun showCancelConfirmationDialog(booking: FirebaseBooking) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Cancel Reservation")
+            .setMessage("Are you sure you want to cancel your reservation at ${booking.gameStationName} for ${booking.time}?")
+            .setPositiveButton("Yes, Cancel") { _, _ ->
+                cancelBooking(booking)
+            }
+            .setNegativeButton("Keep Reservation", null)
+            .show()
+    }
+    
+    private fun cancelBooking(booking: FirebaseBooking) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val result = FirestoreUtils.cancelBooking(booking.id)
+                
+                if (result.isSuccess) {
+                    showToast("Reservation cancelled successfully")
+                    hideActiveReservation()
+                    activeBooking = null
+                } else {
+                    Log.e(TAG, "Failed to cancel booking", result.exceptionOrNull())
+                    showToast("Failed to cancel reservation. Please try again.")
+                }
+                
+            } catch (e: Exception) {
+                Log.e(TAG, "Error cancelling booking", e)
+                showToast("Error occurred while cancelling reservation")
+            }
+        }
+    }
+    
+    private fun showBookingDetailsDialog(booking: FirebaseBooking) {
+        val bookingDate = LocalDate.parse(booking.date)
+        val formatter = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
+        
+        val details = """
+            Station: ${booking.gameStationName}
+            ${booking.gameStationSubName}
+            
+            Date: ${bookingDate.format(formatter)}
+            Time: ${booking.time}
+            
+            Student: ${booking.studentFullName}
+            NIM: ${booking.studentNim}
+            Study Program: ${booking.studentStudyProgram}
+            Email: ${booking.studentEmail}
+            
+            Deposit Item: ${booking.depositItem}
+            Status: ${booking.status}
+        """.trimIndent()
+        
+        AlertDialog.Builder(requireContext())
+            .setTitle("Booking Details")
+            .setMessage(details)
+            .setPositiveButton("OK", null)
+            .show()
     }
     
     private fun loadGameStations() {

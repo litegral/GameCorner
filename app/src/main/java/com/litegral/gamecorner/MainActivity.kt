@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.litegral.gamecorner.fragments.FavoritesFragment
 import com.litegral.gamecorner.fragments.HomeFragment
 import com.litegral.gamecorner.utils.AuthUtils
 import com.litegral.gamecorner.utils.PreferenceUtils
@@ -54,8 +55,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_favorites -> {
-                    // TODO: Create and load FavoritesFragment
-                    loadFragment(createPlaceholderFragment("Favorites"))
+                    loadFragment(FavoritesFragment.newInstance())
                     true
                 }
                 R.id.nav_profile -> {

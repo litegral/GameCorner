@@ -35,4 +35,12 @@
     
     <!-- Common -->
     <string name="hello_world">Hello World!</string>
+    
+    <!-- Booking Success -->
+    <string name="ps_booked_successfully">PS Booked Successfully!</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="deposit_item">Deposit Item</string>
+    <string name="view_all_play_station">View all Play Station</string>
+    <string name="back_to_home">Home</string>
 </resources>

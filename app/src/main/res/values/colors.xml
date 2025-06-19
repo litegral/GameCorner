@@ -20,10 +20,13 @@
     <!-- Accent Colors -->
     <color name="accent_yellow">#FFD700</color>
     <color name="accent_orange">#F8BE4F</color>
+    <color name="accent_green">#4CAF50</color>
     
     <!-- Background Colors -->
     <color name="navbar_background">#1A1D25</color>
     <color name="card_background_blur">#B3000000</color>
+    <color name="card_background_dark">#1AF8F8F8</color>
+    <color name="card_background_light">#FFFEFD</color>
     
     <!-- Button Colors -->
     <color name="button_api_background">#1AFFFFFF</color>
@@ -32,6 +35,9 @@
     <color name="bottom_nav_selected_start">#F8BE4F</color>
     <color name="bottom_nav_selected_end">#FFFFFF</color>
     <color name="bottom_nav_unselected">#8A8C90</color>
+    
+    <!-- Warning Colors -->
+    <color name="warning_text">#FF9800</color>
     
     <!-- Transparent Colors -->
     <color name="transparent">#00000000</color>

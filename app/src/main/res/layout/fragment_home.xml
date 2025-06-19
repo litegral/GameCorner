@@ -120,6 +120,15 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <!-- Active Reservation Component -->
+            <include
+                android:id="@+id/active_reservation_component"
+                layout="@layout/component_active_reservation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone" />
+
             <!-- Game Stations Horizontal RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/game_stations_recycler"

@@ -132,8 +132,12 @@ class PSDetailFragment : Fragment() {
         
         selectPSButton.setOnClickListener {
             gameStation?.let { station ->
-                // TODO: Navigate to booking/selection screen
-                Toast.makeText(requireContext(), "Select PS: ${station.name}", Toast.LENGTH_SHORT).show()
+                // Navigate to booking screen
+                val bookingFragment = BookingFragment.newInstance(station)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, bookingFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
         }
     }
