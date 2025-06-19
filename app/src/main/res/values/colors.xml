@@ -23,7 +23,7 @@
     
     <!-- Background Colors -->
     <color name="navbar_background">#1A1D25</color>
-    <color name="card_background_blur">#33FFFFFF</color>
+    <color name="card_background_blur">#B3000000</color>
     
     <!-- Button Colors -->
     <color name="button_api_background">#1AFFFFFF</color>
