@@ -21,6 +21,8 @@
     <color name="accent_yellow">#FFD700</color>
     <color name="accent_orange">#F8BE4F</color>
     <color name="accent_green">#4CAF50</color>
+    <color name="accent_red">#F44336</color>
+    <color name="accent_purple">#9C27B0</color>
     
     <!-- Background Colors -->
     <color name="navbar_background">#1A1D25</color>

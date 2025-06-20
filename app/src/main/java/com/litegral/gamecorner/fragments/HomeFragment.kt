@@ -24,6 +24,7 @@ import com.litegral.gamecorner.repositories.GameStationRepository
 import com.litegral.gamecorner.utils.AuthUtils
 import com.litegral.gamecorner.utils.FavoriteUtils
 import com.litegral.gamecorner.utils.FirestoreUtils
+import com.litegral.gamecorner.utils.NotificationScheduler
 import com.litegral.gamecorner.utils.ProfileUtils
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ class HomeFragment : Fragment() {
     
     private lateinit var welcomeText: TextView
     private lateinit var profileAvatar: CircleImageView
+    private lateinit var notificationBell: View
     private lateinit var gameStationsRecycler: RecyclerView
     private lateinit var loadingIndicator: ProgressBar
     private lateinit var gameStationAdapter: GameStationAdapter
@@ -95,6 +97,7 @@ class HomeFragment : Fragment() {
     private fun initializeViews(view: View) {
         welcomeText = view.findViewById(R.id.welcome_text)
         profileAvatar = view.findViewById(R.id.profile_avatar)
+        notificationBell = view.findViewById(R.id.notification_bell)
         gameStationsRecycler = view.findViewById(R.id.game_stations_recycler)
         loadingIndicator = view.findViewById(R.id.loading_indicator)
         
@@ -135,6 +138,11 @@ class HomeFragment : Fragment() {
         profileAvatar.setOnClickListener {
             navigateToProfile()
         }
+        
+        // Add click listener to notification bell
+        notificationBell.setOnClickListener {
+            navigateToNotifications()
+        }
     }
     
     private fun loadUserProfileImage() {
@@ -158,6 +166,14 @@ class HomeFragment : Fragment() {
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, profileFragment)
             .addToBackStack("Profile")
+            .commit()
+    }
+    
+    private fun navigateToNotifications() {
+        val notificationFragment = NotificationFragment.newInstance()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, notificationFragment)
+            .addToBackStack("Notifications")
             .commit()
     }
     
@@ -246,11 +262,36 @@ class HomeFragment : Fragment() {
         reservationTimeText.text = booking.time
         
         activeReservationComponent.visibility = View.VISIBLE
+        
+        // Schedule notification reminder for this booking
+        if (bookingDate.isEqual(today)) {
+            try {
+                NotificationScheduler.scheduleBookingReminder(
+                    requireContext(), 
+                    booking.id, 
+                    booking.time, 
+                    booking.gameStationName
+                )
+                Log.d(TAG, "Scheduled reminder for booking ${booking.id} at ${booking.gameStationName}")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to schedule notification reminder", e)
+            }
+        }
     }
     
     private fun hideActiveReservation() {
         if (!isAdded || view == null) return
         activeReservationComponent.visibility = View.GONE
+        
+        // Cancel any existing reminders when hiding active reservation
+        activeBooking?.let { booking ->
+            try {
+                NotificationScheduler.cancelBookingReminder(requireContext(), booking.id)
+                Log.d(TAG, "Cancelled reminder for booking ${booking.id}")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to cancel notification reminder", e)
+            }
+        }
     }
     
     private fun showCancelConfirmationDialog(booking: FirebaseBooking) {
@@ -270,6 +311,14 @@ class HomeFragment : Fragment() {
                 val result = FirestoreUtils.cancelBooking(booking.id)
                 
                 if (result.isSuccess) {
+                    // Cancel the notification reminder
+                    try {
+                        NotificationScheduler.cancelBookingReminder(requireContext(), booking.id)
+                        Log.d(TAG, "Cancelled notification reminder for booking ${booking.id}")
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to cancel notification reminder", e)
+                    }
+                    
                     showToast("Reservation cancelled successfully")
                     hideActiveReservation()
                     activeBooking = null
